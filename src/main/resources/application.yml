@@ -1,3 +1,7 @@
 spring:
-    application:
-        name: middle
+  application:
+    name: middle
+server:
+  port: 8088
+backendService:
+  url: http://localhost:8089
