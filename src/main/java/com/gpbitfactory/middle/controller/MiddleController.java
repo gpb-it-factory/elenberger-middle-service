@@ -24,12 +24,12 @@ public class MiddleController {
     @PostMapping("/users")
     public ResponseEntity<String> registerUser(@RequestBody RegisterRequestDTO requestDTO) {
         if (userService.isRegistered(requestDTO.userID())) {
-            return new ResponseEntity<String>("Пользователь уже зарегистрирован!", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Пользователь уже зарегистрирован!", HttpStatus.CONFLICT);
         }
         if (userService.postUserToBack(requestDTO)) {
-            return new ResponseEntity<String>("Пользователь " + requestDTO.userName() + " зарегистрирован",
+            return new ResponseEntity<>("Пользователь " + requestDTO.userName() + " зарегистрирован",
                     HttpStatus.ACCEPTED);
         }
-        return new ResponseEntity<String>("Произошла непредвиденная ошибка!", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>("Произошла непредвиденная ошибка!", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
