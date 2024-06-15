@@ -1,6 +1,6 @@
 package com.gpbitfactory.middle.config;
 
-import com.gpbitfactory.middle.service.MiddleService;
+import com.gpbitfactory.middle.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +20,7 @@ public class MiddleConfig {
 
 
     @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder, @Value("${backendService.url}") String backUri) {
+    public RestTemplate restTemplate(RestTemplateBuilder builder, @Value("${middleService.url}") String backUri) {
         return builder
                 .rootUri(backUri)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -30,7 +30,7 @@ public class MiddleConfig {
     }
 
     @Bean
-    public MiddleService middleService() {
-        return new MiddleService(restTemplate(restTemplateBuilder(), null));
+    public UserService userService(@Value("${backendService.url}") String backUri) {
+        return new UserService(restTemplate(restTemplateBuilder(), backUri));
     }
 }
