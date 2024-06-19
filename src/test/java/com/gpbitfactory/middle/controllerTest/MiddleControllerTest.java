@@ -64,18 +64,17 @@ public class MiddleControllerTest {
 
     @Test
     void createAccountOKTest() throws Exception {
-        when(accountService.createAccount(requestDTO)).thenReturn(204);
+        when(accountService.createAccount(requestDTO.userID())).thenReturn(204);
         mockMvc.perform(post("/api/v1/users/10/accounts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(requestDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("Cчёт для пользователя "
-                        + requestDTO.userName() + " создан")));
+                .andExpect(content().string(containsString("Cчёт для пользователя создан")));
     }
 
     @Test
     void createAccountConflictTest() throws Exception {
-        when(accountService.createAccount(requestDTO)).thenReturn(409);
+        when(accountService.createAccount(requestDTO.userID())).thenReturn(409);
         mockMvc.perform(post("/api/v1/users/10/accounts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(requestDTO)))
@@ -85,7 +84,7 @@ public class MiddleControllerTest {
 
     @Test
     void createAccountErrorTest() throws Exception {
-        when(accountService.createAccount(requestDTO)).thenReturn(500);
+        when(accountService.createAccount(requestDTO.userID())).thenReturn(500);
         mockMvc.perform(post("/api/v1/users/10/accounts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(requestDTO)))

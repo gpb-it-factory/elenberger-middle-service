@@ -39,7 +39,6 @@ public class UserServiceTest {
     @Test
     public void registerUserOKTest() {
         wireMockServer.stubFor(post(urlEqualTo(url)).willReturn(aResponse().withStatus(202)));
-        System.out.println(wireMockServer.baseUrl());
         Assertions.assertEquals(204, userService.registerUser(requestDTO));
 
     }
@@ -47,7 +46,6 @@ public class UserServiceTest {
     @Test
     public void registerUserConflictTest() {
         wireMockServer.stubFor(post(urlEqualTo(url)).willReturn(aResponse().withStatus(409)));
-        System.out.println(wireMockServer.baseUrl());
         Assertions.assertEquals(409, userService.registerUser(requestDTO));
 
     }

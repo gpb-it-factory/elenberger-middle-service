@@ -39,16 +39,12 @@ public class AccountServiceTest {
     @Test
     public void createAccountOKTest() {
         wireMockServer.stubFor(post(urlEqualTo(url)).willReturn(aResponse().withStatus(202)));
-        System.out.println(wireMockServer.baseUrl());
-        Assertions.assertEquals(204, accountService.createAccount(requestDTO));
-
+        Assertions.assertEquals(204, accountService.createAccount(requestDTO.userID()));
     }
 
     @Test
     public void createAccountConflictTest() {
         wireMockServer.stubFor(post(urlEqualTo(url)).willReturn(aResponse().withStatus(409)));
-        System.out.println(wireMockServer.baseUrl());
-        Assertions.assertEquals(409, accountService.createAccount(requestDTO));
-
+        Assertions.assertEquals(409, accountService.createAccount(requestDTO.userID()));
     }
 }
