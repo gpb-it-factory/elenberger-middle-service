@@ -1,5 +1,6 @@
 package com.gpbitfactory.middle.config;
 
+import com.gpbitfactory.middle.service.AccountService;
 import com.gpbitfactory.middle.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -32,5 +33,10 @@ public class MiddleConfig {
     @Bean
     public UserService userService(@Value("${backendService.url}") String backUri) {
         return new UserService(restTemplate(restTemplateBuilder(), backUri));
+    }
+
+    @Bean
+    public AccountService accountService(@Value("${backendService.url}") String backUri) {
+        return new AccountService(restTemplate(restTemplateBuilder(), backUri));
     }
 }

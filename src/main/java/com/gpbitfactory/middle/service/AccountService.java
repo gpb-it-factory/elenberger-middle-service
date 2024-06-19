@@ -2,22 +2,21 @@ package com.gpbitfactory.middle.service;
 
 import com.gpbitfactory.middle.model.RegisterRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class UserService {
+public class AccountService {
 
     private final RestTemplate restTemplate;
 
     @Autowired
-    public UserService(RestTemplate restTemplate) {
+    public AccountService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public int registerUser(RegisterRequestDTO requestDTO) {
+    public int createAccount(RegisterRequestDTO requestDTO) {
         try {
             postToBack(requestDTO);
             return 204;
@@ -26,7 +25,8 @@ public class UserService {
         }
     }
 
+
     private void postToBack(RegisterRequestDTO requestDTO) {
-        restTemplate.postForEntity("/v2/users", requestDTO, ResponseEntity.class);
+        restTemplate.postForEntity("/v2/users/{id}/accounts", requestDTO.userID(), String.class, requestDTO.userID());
     }
 }
