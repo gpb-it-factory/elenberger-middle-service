@@ -1,9 +1,7 @@
 package com.gpbitfactory.middle.service;
 
-import com.gpbitfactory.middle.model.RegisterRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
