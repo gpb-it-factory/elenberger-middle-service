@@ -32,7 +32,7 @@ public class MiddleController {
     }
 
     @PostMapping("/users/{id}/accounts")
-    public ResponseEntity<String> createAccount(@PathVariable Long id) {
+    public ResponseEntity<String> createAccount(@RequestBody @PathVariable Long id) {
         return switch (accountService.createAccount(id)) {
             case 204 -> new ResponseEntity<>("Cчёт для пользователя создан", HttpStatus.CREATED);
             case 409 -> new ResponseEntity<>("Пользователь уже имеет счет в мини-банке!", HttpStatus.CONFLICT);
