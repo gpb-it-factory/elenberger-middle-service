@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.gpbitfactory.middle.config.MiddleConfig;
 import com.gpbitfactory.middle.model.RegisterRequestDTO;
-import com.gpbitfactory.middle.service.UserService;
+import com.gpbitfactory.middle.service.AccountService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,11 +17,11 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 
 @SpringBootTest(classes = {MiddleConfig.class})
 @WireMockTest
-public class UserServiceTest {
+public class AccountServiceTest {
     private static WireMockServer wireMockServer;
     static MiddleConfig middleConfig = new MiddleConfig();
-    String url = "/v2/users";
-    UserService userService = middleConfig.userService(wireMockServer.baseUrl());
+    String url = "/v2/users/100/accounts";
+    AccountService accountService = middleConfig.accountService(wireMockServer.baseUrl());
     RegisterRequestDTO requestDTO = new RegisterRequestDTO(100L, "ABOBA");
 
     @BeforeAll
@@ -37,21 +37,20 @@ public class UserServiceTest {
     }
 
     @Test
-    public void registerUserOKTest() {
+    public void createAccountOKTest() {
         wireMockServer.stubFor(post(urlEqualTo(url)).willReturn(aResponse().withStatus(202)));
 
-        int responseCode = userService.registerUser(requestDTO);
+        int responseCode = accountService.createAccount(requestDTO.userID());
 
         Assertions.assertEquals(204, responseCode);
     }
 
     @Test
-    public void registerUserConflictTest() {
+    public void createAccountConflictTest() {
         wireMockServer.stubFor(post(urlEqualTo(url)).willReturn(aResponse().withStatus(409)));
 
-        int responseCode = userService.registerUser(requestDTO);
+        int responseCode = accountService.createAccount(requestDTO.userID());
 
         Assertions.assertEquals(409, responseCode);
-
     }
 }
