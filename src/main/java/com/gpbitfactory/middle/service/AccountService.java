@@ -33,11 +33,10 @@ public class AccountService {
     }
 
     public ResponseEntity<?> getBalance(Long id) {
-        ResponseEntity<List<AccountInfoDTO>> response = restClient.get()
+
+        return restClient.get()
                 .uri("/v2/users/" + id + "/accounts")
                 .retrieve().toEntity(new ParameterizedTypeReference<List<AccountInfoDTO>>() {
                 });
-
-        return response;
     }
 }
