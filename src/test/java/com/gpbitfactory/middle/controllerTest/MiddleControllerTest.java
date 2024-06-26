@@ -1,6 +1,5 @@
 package com.gpbitfactory.middle.controllerTest;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpbitfactory.middle.config.MiddleConfig;
 import com.gpbitfactory.middle.controller.MiddleController;
