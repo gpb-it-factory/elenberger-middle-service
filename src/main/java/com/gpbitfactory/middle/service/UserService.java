@@ -5,28 +5,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 @Service
 public class UserService {
 
-    private final RestTemplate restTemplate;
+    private final RestClient restClient;
 
     @Autowired
-    public UserService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public UserService(RestClient restClient) {
+        this.restClient = restClient;
     }
 
     public int registerUser(RegisterRequestDTO requestDTO) {
         try {
-            postToBack(requestDTO);
+            restClient.post()
+                    .uri("/v2/users")
+                    .body(requestDTO)
+                    .retrieve().toEntity(ResponseEntity.class);
             return 204;
         } catch (HttpClientErrorException e) {
             return e.getStatusCode().value();
         }
-    }
-
-    private void postToBack(RegisterRequestDTO requestDTO) {
-        restTemplate.postForEntity("/v2/users", requestDTO, ResponseEntity.class);
     }
 }
