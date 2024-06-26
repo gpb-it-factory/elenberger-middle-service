@@ -1,5 +1,6 @@
 package com.gpbitfactory.middle.controllerTest;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpbitfactory.middle.config.MiddleConfig;
 import com.gpbitfactory.middle.controller.MiddleController;
@@ -8,14 +9,19 @@ import com.gpbitfactory.middle.service.AccountService;
 import com.gpbitfactory.middle.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JsonParseException;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.HttpClientErrorException;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -90,6 +96,37 @@ public class MiddleControllerTest {
                         .content(asJsonString(requestDTO)))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().string(containsString("Произошла непредвиденная ошибка!")));
+    }
+
+    @Test
+    void getBalanceOk() throws Exception {
+        when(accountService.getBalance(requestDTO.userID()))
+                .thenReturn(new ResponseEntity<>(HttpStatus.OK));
+        mockMvc.perform(get("/api/v1/users/10/accounts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(requestDTO)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getBalanceHttpError() throws Exception {
+        when(accountService.getBalance(requestDTO.userID()))
+                .thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
+        mockMvc.perform(get("/api/v1/users/10/accounts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(requestDTO)))
+                .andExpect(status().isNotFound());
+    }
+
+
+    @Test
+    void getBalanceError() throws Exception {
+        when(accountService.getBalance(requestDTO.userID()))
+                .thenThrow(new JsonParseException());
+        mockMvc.perform(get("/api/v1/users/10/accounts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(requestDTO)))
+                .andExpect(status().isNoContent());
     }
 
     private static String asJsonString(final Object obj) {
