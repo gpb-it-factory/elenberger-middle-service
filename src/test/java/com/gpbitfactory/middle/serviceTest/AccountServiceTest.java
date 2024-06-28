@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.gpbitfactory.middle.config.MiddleConfig;
 import com.gpbitfactory.middle.model.AccountInfoDTO;
+import com.gpbitfactory.middle.model.AccountRegisterDTO;
 import com.gpbitfactory.middle.model.RegisterRequestDTO;
 import com.gpbitfactory.middle.service.AccountService;
 import org.junit.jupiter.api.AfterAll;
@@ -28,6 +29,7 @@ public class AccountServiceTest {
     String url = "/v2/users/100/accounts";
     AccountService accountService = middleConfig.accountService(wireMockServer.baseUrl());
     RegisterRequestDTO requestDTO = new RegisterRequestDTO(100L, "ABOBA");
+    AccountRegisterDTO accountRegisterDTO = new AccountRegisterDTO(100L, "name");
 
     String jsonResponse = """
             [
@@ -55,7 +57,7 @@ public class AccountServiceTest {
     public void createAccountOKTest() {
         wireMockServer.stubFor(post(urlEqualTo(url)).willReturn(aResponse().withStatus(202)));
 
-        int responseCode = accountService.createAccount(requestDTO.userID());
+        int responseCode = accountService.createAccount(accountRegisterDTO);
 
         Assertions.assertEquals(204, responseCode);
     }
@@ -64,7 +66,7 @@ public class AccountServiceTest {
     public void createAccountConflictTest() {
         wireMockServer.stubFor(post(urlEqualTo(url)).willReturn(aResponse().withStatus(409)));
 
-        int responseCode = accountService.createAccount(requestDTO.userID());
+        int responseCode = accountService.createAccount(accountRegisterDTO);
 
         Assertions.assertEquals(409, responseCode);
     }

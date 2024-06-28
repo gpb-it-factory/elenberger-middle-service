@@ -1,6 +1,7 @@
 package com.gpbitfactory.middle.service;
 
 import com.gpbitfactory.middle.model.AccountInfoDTO;
+import com.gpbitfactory.middle.model.AccountRegisterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,11 @@ public class AccountService {
         this.restClient = restClient;
     }
 
-    public int createAccount(Long id) {
+    public int createAccount(AccountRegisterDTO accountRegisterDTO) {
         try {
             restClient.post()
-                    .uri("/v2/users/" + id + "/accounts")
-                    .body(id)
+                    .uri("/v2/users/" + accountRegisterDTO.id() + "/accounts")
+                    .body(accountRegisterDTO.accountName())
                     .retrieve().toEntity(String.class);
             return 204;
         } catch (HttpClientErrorException e) {
