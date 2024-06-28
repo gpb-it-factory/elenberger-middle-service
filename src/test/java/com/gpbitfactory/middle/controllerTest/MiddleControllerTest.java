@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gpbitfactory.middle.config.MiddleConfig;
 import com.gpbitfactory.middle.controller.MiddleController;
 import com.gpbitfactory.middle.model.RegisterRequestDTO;
+import com.gpbitfactory.middle.model.TransferDTO;
 import com.gpbitfactory.middle.service.AccountService;
+import com.gpbitfactory.middle.service.TransferService;
 import com.gpbitfactory.middle.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +34,12 @@ public class MiddleControllerTest {
     UserService userService;
     @MockBean
     AccountService accountService;
+    @MockBean
+    TransferService transferService;
     @Autowired
     private MockMvc mockMvc;
     RegisterRequestDTO requestDTO = new RegisterRequestDTO(10L, "ABOBA");
+    TransferDTO transferDTO = new TransferDTO("OMEMA", "ABOBA", "200.50");
 
     @Test
     void registerUserOKTest() throws Exception {
@@ -98,7 +103,7 @@ public class MiddleControllerTest {
     }
 
     @Test
-    void getBalanceOk() throws Exception {
+    void getBalanceOkTest() throws Exception {
         when(accountService.getBalance(requestDTO.userID()))
                 .thenReturn(new ResponseEntity<>(HttpStatus.OK));
         mockMvc.perform(get("/api/v1/users/10/accounts")
@@ -108,7 +113,7 @@ public class MiddleControllerTest {
     }
 
     @Test
-    void getBalanceHttpError() throws Exception {
+    void getBalanceHttpErrorTest() throws Exception {
         when(accountService.getBalance(requestDTO.userID()))
                 .thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
         mockMvc.perform(get("/api/v1/users/10/accounts")
@@ -119,13 +124,43 @@ public class MiddleControllerTest {
 
 
     @Test
-    void getBalanceError() throws Exception {
+    void getBalanceErrorTest() throws Exception {
         when(accountService.getBalance(requestDTO.userID()))
                 .thenThrow(new JsonParseException());
         mockMvc.perform(get("/api/v1/users/10/accounts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(requestDTO)))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void makeTransferOkTest() throws Exception {
+        when(transferService.makeTransfer(transferDTO))
+                .thenReturn(new ResponseEntity<>(HttpStatus.OK));
+        mockMvc.perform(post("/api/v1/transfers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(transferDTO)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void makeTransferIncorrectSenderOrDestinationTest() throws Exception {
+        when(transferService.makeTransfer(transferDTO))
+                .thenReturn(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        mockMvc.perform(post("/api/v1/transfers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(transferDTO)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void makeTransferErrorTest() throws Exception {
+        when(transferService.makeTransfer(transferDTO))
+                .thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
+        mockMvc.perform(post("/api/v1/transfers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(transferDTO)))
+                .andExpect(status().isBadRequest());
     }
 
     private static String asJsonString(final Object obj) {

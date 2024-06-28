@@ -1,7 +1,9 @@
 package com.gpbitfactory.middle.controller;
 
 import com.gpbitfactory.middle.model.RegisterRequestDTO;
+import com.gpbitfactory.middle.model.TransferDTO;
 import com.gpbitfactory.middle.service.AccountService;
+import com.gpbitfactory.middle.service.TransferService;
 import com.gpbitfactory.middle.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,11 +17,13 @@ public class MiddleController {
 
     private final UserService userService;
     private final AccountService accountService;
+    private final TransferService transferService;
 
     @Autowired
-    public MiddleController(UserService userService, AccountService accountService) {
+    public MiddleController(UserService userService, AccountService accountService, TransferService transferService) {
         this.userService = userService;
         this.accountService = accountService;
+        this.transferService = transferService;
     }
 
     @PostMapping("/users")
@@ -51,5 +55,14 @@ public class MiddleController {
             return new ResponseEntity<>("Непредвиденная ошибка", HttpStatus.NO_CONTENT);
         }
 
+    }
+
+    @PostMapping("/transfers")
+    public ResponseEntity<?> makeTransfer(@RequestBody TransferDTO transferDTO) {
+        try {
+            return transferService.makeTransfer(transferDTO);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Непредвиденная ошибка!", HttpStatus.BAD_REQUEST);
+        }
     }
 }
