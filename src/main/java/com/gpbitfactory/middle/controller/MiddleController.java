@@ -51,7 +51,7 @@ public class MiddleController {
 
     @GetMapping("/users/{id}/accounts")
     public ResponseEntity<?> getBalance(@RequestBody @PathVariable Long id) {
-        log.info("Получен запрос просмотра списка счетов пользователя с Id: " + id);
+        log.info("Получен запрос просмотра списка счетов пользователя с id: " + id);
         try {
             return accountService.getBalance(id);
         } catch (HttpClientErrorException e) {

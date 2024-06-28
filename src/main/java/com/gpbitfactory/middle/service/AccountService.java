@@ -31,7 +31,7 @@ public class AccountService {
             log.info("Регистрация счета для пользователя с id: " + id + " прошла успешно");
             return 204;
         } catch (HttpClientErrorException e) {
-            log.error("Ошибка регистрации пользователя: " + id + ". Код ошибки: " + e.getStatusCode().value());
+            log.error("Ошибка регистрации пользователя с id: " + id + ". Код ошибки: " + e.getStatusCode().value());
             return e.getStatusCode().value();
         }
     }
@@ -41,7 +41,7 @@ public class AccountService {
                 .uri("/v2/users/" + id + "/accounts")
                 .retrieve().toEntity(new ParameterizedTypeReference<List<AccountInfoDTO>>() {
                 });
-        log.info("Список счетов пользователя с id" + id + "получен");
+        log.info("Список счетов пользователя с id " + id + "получен");
         return response;
     }
 }
