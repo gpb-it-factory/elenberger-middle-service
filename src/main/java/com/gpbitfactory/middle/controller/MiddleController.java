@@ -5,6 +5,7 @@ import com.gpbitfactory.middle.model.TransferDTO;
 import com.gpbitfactory.middle.service.AccountService;
 import com.gpbitfactory.middle.service.TransferService;
 import com.gpbitfactory.middle.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 @RequestMapping("/api/v1")
+@Slf4j
 public class MiddleController {
 
     private final UserService userService;
@@ -28,6 +30,7 @@ public class MiddleController {
 
     @PostMapping("/users")
     public ResponseEntity<String> registerUser(@RequestBody RegisterRequestDTO requestDTO) {
+        log.info("Получен запрос регистрации пользователя: " + requestDTO.userName());
         return switch (userService.registerUser(requestDTO)) {
             case 204 -> new ResponseEntity<>("Пользователь " + requestDTO.userName() + " зарегистрирован",
                     HttpStatus.ACCEPTED);
@@ -38,6 +41,7 @@ public class MiddleController {
 
     @PostMapping("/users/{id}/accounts")
     public ResponseEntity<String> createAccount(@RequestBody @PathVariable Long id) {
+        log.info("Получен запрос регистрации счета пользователя с Id: " + id);
         return switch (accountService.createAccount(id)) {
             case 204 -> new ResponseEntity<>("Cчёт для пользователя создан", HttpStatus.CREATED);
             case 409 -> new ResponseEntity<>("Пользователь уже имеет счет в мини-банке!", HttpStatus.CONFLICT);
@@ -47,11 +51,14 @@ public class MiddleController {
 
     @GetMapping("/users/{id}/accounts")
     public ResponseEntity<?> getBalance(@RequestBody @PathVariable Long id) {
+        log.info("Получен запрос просмотра списка счетов пользователя с Id: " + id);
         try {
             return accountService.getBalance(id);
         } catch (HttpClientErrorException e) {
+            log.error("Произошла ошибка! Счета не обнаружены!");
             return new ResponseEntity<>("Счет не найден!", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
+            log.error("Произошла непредвиденная ошибка!");
             return new ResponseEntity<>("Непредвиденная ошибка", HttpStatus.NO_CONTENT);
         }
 
@@ -59,9 +66,12 @@ public class MiddleController {
 
     @PostMapping("/transfers")
     public ResponseEntity<?> makeTransfer(@RequestBody TransferDTO transferDTO) {
+        log.info("Получен запрос перевода на сумму " + transferDTO.amount()
+                + ", от пользователя " + transferDTO.from() + ", для пользователя " + transferDTO.to());
         try {
             return transferService.makeTransfer(transferDTO);
         } catch (Exception e) {
+            log.error("Произошла непредвиденная ошибка!");
             return new ResponseEntity<>("Непредвиденная ошибка!", HttpStatus.BAD_REQUEST);
         }
     }
