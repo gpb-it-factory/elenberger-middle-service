@@ -40,12 +40,9 @@ public class TransferService {
                 .uri("/v2/transfers")
                 .body(transferDTO)
                 .retrieve().toEntity(String.class);
-        log.info("Перевод на сумму "
-                + transferDTO.amount()
-                + ", от пользователя "
-                + transferDTO.from()
-                + ", для пользователя "
-                + transferDTO.to()
+        log.info("Перевод на сумму " + transferDTO.amount()
+                + ", от пользователя " + transferDTO.from()
+                + ", для пользователя " + transferDTO.to()
                 + "выполнен успешно!");
         return response;
     }
