@@ -1,6 +1,8 @@
 package com.gpbitfactory.middle.service;
 
 import com.gpbitfactory.middle.model.AccountInfoDTO;
+import com.gpbitfactory.middle.model.AccountNameDTO;
+import com.gpbitfactory.middle.model.AccountRegisterDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -22,16 +24,17 @@ public class AccountService {
         this.restClient = restClient;
     }
 
-    public int createAccount(Long id) {
+    public int createAccount(AccountRegisterDTO accountRegisterDTO) {
+        AccountNameDTO accountNameDTO = new AccountNameDTO(accountRegisterDTO.accountName());
         try {
             restClient.post()
-                    .uri("/v2/users/" + id + "/accounts")
-                    .body(id)
+                    .uri("/v2/users/" + accountRegisterDTO.id() + "/accounts")
+                    .body(accountNameDTO)
                     .retrieve().toEntity(String.class);
-            log.info("Регистрация счета для пользователя с id: " + id + " прошла успешно");
+            log.info("Регистрация счета для пользователя с id: " + accountRegisterDTO.id() + " прошла успешно");
             return 204;
         } catch (HttpClientErrorException e) {
-            log.error("Ошибка регистрации пользователя с id: " + id + ". Код ошибки: " + e.getStatusCode().value());
+            log.error("Ошибка регистрации пользователя с id: " + accountRegisterDTO.id() + ". Код ошибки: " + e.getStatusCode().value());
             return e.getStatusCode().value();
         }
     }

@@ -1,4 +1,4 @@
 package com.gpbitfactory.middle.model;
 
-public record RegisterRequestDTO(long userID, String userName) {
+public record RegisterRequestDTO(Long userId, String userName) {
 }
