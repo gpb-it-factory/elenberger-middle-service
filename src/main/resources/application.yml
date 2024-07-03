@@ -4,4 +4,4 @@ spring:
 server:
   port: 8088
 backendService:
-  url: http://localhost:8089
+  url: ${BACKEND_URL} #http://localhost:8089
