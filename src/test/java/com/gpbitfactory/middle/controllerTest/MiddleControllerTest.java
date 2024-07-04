@@ -42,6 +42,7 @@ public class MiddleControllerTest {
     RegisterRequestDTO requestDTO = new RegisterRequestDTO(10L, "ABOBA");
     TransferDTO transferDTO = new TransferDTO("OMEMA", "ABOBA", "200.50");
     AccountRegisterDTO accountRegisterDTO = new AccountRegisterDTO(10L, "name");
+  
     @Test
     void registerUserOKTest() throws Exception {
         when(userService.registerUser(requestDTO)).thenReturn(204);
@@ -114,6 +115,7 @@ public class MiddleControllerTest {
     }
 
     @Test
+
     void getBalanceHttpErrorTest() throws Exception {
         when(accountService.getBalance(requestDTO.userId()))
                 .thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
@@ -125,6 +127,7 @@ public class MiddleControllerTest {
 
 
     @Test
+
     void getBalanceErrorTest() throws Exception {
         when(accountService.getBalance(requestDTO.userId()))
                 .thenThrow(new JsonParseException());

@@ -80,7 +80,6 @@ public class AccountServiceTest {
                 .withStatus(200)
                 .withBody(jsonResponse)
                 .withHeader("Content-Type", "application/json")));
-
         ResponseEntity<?> responseReceived = accountService.getBalance(requestDTO.userId());
 
         Assertions.assertEquals(list, responseReceived.getBody());

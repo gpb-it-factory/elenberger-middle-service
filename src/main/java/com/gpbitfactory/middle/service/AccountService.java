@@ -25,6 +25,7 @@ public class AccountService {
     }
 
     public int createAccount(AccountRegisterDTO accountRegisterDTO) {
+
         AccountNameDTO accountNameDTO = new AccountNameDTO(accountRegisterDTO.accountName());
         try {
             restClient.post()
@@ -40,6 +41,7 @@ public class AccountService {
     }
 
     public ResponseEntity<?> getBalance(Long id) {
+
         ResponseEntity<?> response = restClient.get()
                 .uri("/v2/users/" + id + "/accounts")
                 .retrieve().toEntity(new ParameterizedTypeReference<List<AccountInfoDTO>>() {
