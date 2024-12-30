@@ -1,6 +1,7 @@
 package com.gpbitfactory.middle.config;
 
 import com.gpbitfactory.middle.service.AccountService;
+import com.gpbitfactory.middle.service.TransferService;
 import com.gpbitfactory.middle.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -42,5 +43,10 @@ public class MiddleConfig {
     @Bean
     public AccountService accountService(@Value("${backendService.url}") String backUrl) {
         return new AccountService(restClient(backUrl));
+    }
+
+    @Bean
+    public TransferService transferService(@Value("${backendService.url}") String backUrl) {
+        return new TransferService(restClient(backUrl));
     }
 }

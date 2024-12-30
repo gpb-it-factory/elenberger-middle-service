@@ -30,7 +30,6 @@ public class AccountServiceTest {
     AccountService accountService = middleConfig.accountService(wireMockServer.baseUrl());
     RegisterRequestDTO requestDTO = new RegisterRequestDTO(100L, "ABOBA");
     AccountRegisterDTO accountRegisterDTO = new AccountRegisterDTO(100L, "name");
-
     String jsonResponse = """
             [
               {
@@ -81,8 +80,7 @@ public class AccountServiceTest {
                 .withStatus(200)
                 .withBody(jsonResponse)
                 .withHeader("Content-Type", "application/json")));
-
-        ResponseEntity<?> responseReceived = accountService.getBalance(requestDTO.userID());
+        ResponseEntity<?> responseReceived = accountService.getBalance(requestDTO.userId());
 
         Assertions.assertEquals(list, responseReceived.getBody());
     }

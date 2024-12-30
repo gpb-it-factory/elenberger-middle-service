@@ -54,19 +54,27 @@ deactivate Front
 
 [Вверх :arrow_up:](#contents)
 
-<h2 id="3">Необходимые компоненты</h2>
+<h2 id="3">Используемые компоненты</h2>
 
 :warning: Новые компоненты будут добавляться по мере развития проекта
 
 - [Java 17+](https://www.java.com/ru/)
-- [Gradle 7.4/8.7](https://www.gradle.org/)
-- [SpringBoot](https://www.spring.io/projects/spring-boot)
+- [Gradle 8.7](https://www.gradle.org/)
+- [Spring Boot](https://www.spring.io/projects/spring-boot)
+- [WireMock](https://wiremock.org/)
+- [Lombok](https://projectlombok.org/)
+- [JUnit5](https://junit.org/junit5/)
+- [Mockito](https://site.mockito.org/)
+
+Для работы приложения необходимо иметь установленные Java17+ и Gradle 8.7
 
 [Вверх :arrow_up:](#contents)
 
 <h2 id="4">Скачивание и установка</h2>
 
 :warning: Раздел в разработке\
+Для скачивания репозитория используйте в PowerShell команду:  git clone https://github.com/gpb-it-factory/elenberger-middle-service \
+Для запуска приложения в PowerShell перейдите в каталог со склонированным репозиторием и используйте команду: **./gradlew bootRun**
 
 
 [Вверх :arrow_up:](#contents)
@@ -74,10 +82,8 @@ deactivate Front
 <h2 id="5">Используемые команды и примеры</h2>
 
 :warning: Будут добавляться по мере развития функционала \
-В данный момент доступны команды:\
-**/start** - начинает работу с ботом\
-**/ping** - дает в ответ pong\
-**/help** - команда в разработке, будет выводить список доступных действий
+Команды бота с примерами указаны в [README](https://github.com/gpb-it-factory/elenberger-telergam-bot/blob/trunk/README.md) репозитория телеграм-бота \
+Данный сервис автоматически валидирует и перенаправляет запросы. Внутренних команд не предусмотрено.
 
 [Вверх :arrow_up:](#contents)
 
@@ -96,7 +102,10 @@ Telegram: [LohmatiyShmel](https://t.me/LohmatiyShmel)
 - [x] Задача 3. Создать "скелет" бота
 - [x] Задача 4. Добавить базовый CI
 - [x] Задача 5. Создать репозиторий для middle-сервиса
-- [ ] Задача 6. Добавить функциональность регистрации пользователя
+- [x] Задача 6. Добавить функциональность регистрации пользователя
+- [x] Задача 7. Добавить функциональность создания счёта
+- [x] Задача 8. Добавить функциональность запроса баланса
+- [x] Задача 9. Добавить функциональность перевода
 - [ ] .... TBD
 
 [Вверх :arrow_up:](#contents)
